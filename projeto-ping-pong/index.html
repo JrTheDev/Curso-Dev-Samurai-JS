@@ -51,9 +51,7 @@
                 draw: function() {
                     canvasCtx.fillStyle = "#ffffff"
                     canvasCtx.fillRect(this.x, this.y, this.w, this.h)
-                    
                     this._move()
-
                 }
             }
 
@@ -96,13 +94,13 @@
                 x: 0,
                 y: 0,
                 r: 20,
-                speed: 5,
+                speed: 10,
                 directionX: 1,
                 directionY: 1,
                 _calcPosition: function() {
                     if (this.x > field.w - this.r - rightPaddle.w - gapX) {
                         if (this.y + this.r > rightPaddle.y && this.y - this.r < rightPaddle.y + rightPaddle.h) {
-                            this._reverseX()
+                        this._reverseX()
                         } else {
                           score.increaseHuman()
                           this._pointUp()
@@ -111,7 +109,8 @@
                     
                     if (
                       (this.y - this.r < 0 && this.directionY < 0) ||
-                      (this.y > field.h - this.r && this.directionY > 0)) {
+                      (this.y > field.h - this.r && this.directionY > 0)
+                      ) {
                       this._reverseY()
                     }
                 },
@@ -136,7 +135,6 @@
                 canvasCtx.beginPath()
                 canvasCtx.arc(this.x, this.y, this.r, 0, 2 *Math.PI, false)
                 canvasCtx.fill()
-
                 this._calcPosition()
                 this._move()
                 }
