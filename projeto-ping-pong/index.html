@@ -52,7 +52,7 @@
                     canvasCtx.fillStyle = "#ffffff"
                     canvasCtx.fillRect(this.x, this.y, this.w, this.h)
                     this._move()
-                }
+                },
             }
 
             const rightPaddle = {
@@ -60,10 +60,19 @@
                 y: 100,
                 w: line.w,
                 h: 200,
-                _move: function() {
-                    this.y = ball.y
+                speed: 5,
+                _move: function () {
+                    if (this.y + this.h / 2 < ball.y + ball.r) {
+                      this.y += this.speed
+                    } else {
+                      this.y -= this.speed
+                    }
                 },
-                draw: function() {
+                _speedUp: function () {
+                    this.speed += 1
+                },
+                
+                draw: function () {
                     canvasCtx.fillStyle = "#ffffff"
                     canvasCtx.fillRect(this.x, this.y, this.w, this.h)
 
@@ -98,7 +107,7 @@
                 directionX: 1,
                 directionY: 1,
                 _calcPosition: function() {
-                    if (this.x > field.w - this.r - rightPaddle.w - gapX) {
+                    if (this.x > field.w  - this.r - rightPaddle.w - gapX) {
                         if (this.y + this.r > rightPaddle.y && this.y - this.r < rightPaddle.y + rightPaddle.h) {
                         this._reverseX()
                         } else {
@@ -107,6 +116,15 @@
                         }
                     }
                     
+                    if (this.x < this.r + leftPaddle.w + gapX) {
+                        if (this.y + this.r > leftPaddle.y && this.y - this.r < leftPaddle.y + leftPaddle.h) {
+                            this._reverseX()
+                        } else {
+                          score.increaseComputer()
+                          this._pointUp()  
+                        }
+                    }
+
                     if (
                       (this.y - this.r < 0 && this.directionY < 0) ||
                       (this.y > field.h - this.r && this.directionY > 0)
@@ -115,14 +133,21 @@
                     }
                 },
 
-                reverseX: function() {
+                _reverseX: function() {
                     this.directionX *= -1
                 },
 
                 _reverseY: function() {
                     this.directionY *= -1
                 },
+                
+                _speedUp: function() {
+                    this.speed += 2
+                },
                 _pointUp: function() {
+                    this._speedUp()
+                    rightPaddle._speedUp()
+
                     this.x = field.w / 2
                     this.y = field.h / 2
                 },
